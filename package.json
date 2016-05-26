@@ -2,11 +2,13 @@
   "name": "domoto",
   "version": "0.0.1",
   "description": "Administrador de dispositivos inteligentes con el cual se permite aumentar el comportamiento de los dispositivos buscando la interacción entre los mismos",
-  "main": "index.js",
+  "main": "main.js",
   "bin": {
-    "domoto": "index.js"
+    "domoto": "main.js"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "electron main"
+  },
   "repository": {
     "type": "git",
     "url": "git@gitlab.com:jloboprs/domoto.git"
@@ -17,10 +19,6 @@
   "author": "Jose Lobo",
   "license": "ISC",
   "devDependencies": {
-    "asar": "^0.11.0",
-    "electron-prebuilt": "^0.37.5",
-    "fs-jetpack": "^0.8.0",
-    "q": "^1.4.1",
-    "rcedit": "^0.5.0"
+    "electron-prebuilt": "^1.1.3"
   }
 }
