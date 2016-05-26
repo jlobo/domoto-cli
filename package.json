@@ -2,12 +2,8 @@
   "name": "domoto",
   "version": "0.0.1",
   "description": "Administrador de dispositivos inteligentes con el cual se permite aumentar el comportamiento de los dispositivos buscando la interacción entre los mismos",
-  "main": "main.js",
-  "bin": {
-    "domoto": "main.js"
-  },
   "scripts": {
-    "start": "electron main"
+    "start": "electron ./src/electron"
   },
   "repository": {
     "type": "git",
