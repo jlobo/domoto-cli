@@ -1,26 +1,25 @@
+'use strict';
+
 var childProcess = require('child_process');
 var electron = require('electron-prebuilt');
+var { server } = require('electron-connect');
 
 var gulp = require('gulp');
 var debug = require('gulp-debug');
-var livereload = require('gulp-livereload');
 
-var srcFiles = ['./src/app/**/*', './src/electron/**/*', './src/static/css/**/*', './src/view/**/*'];
+var files = {
+    electron: './src/electron/**/*',
+    app: './src/app/**/*',
+    css: './src/static/css/**/*',
+    view: './src/view/**/*'
+};
 
 gulp.task('watch', function () {
-    livereload.listen();
-    gulp.watch(srcFiles, ['watch:reload']);
+    let connect = server.create({ path: './src/electron' });
+    connect.start();
+
+    gulp.watch(files.electron, connect.restart);
+    gulp.watch([ files.app, files.css, files.view ], connect.reload);
 });
 
-gulp.task('watch:reload', function() {
-    gulp.src(srcFiles)
-    .pipe(debug())
-    .pipe(livereload());
-});
-
-gulp.task('develop', ['watch'], function () {
-    childProcess.spawn(electron, ['./src/electron'], { stdio: 'inherit' })
-    .on('close', () => { process.exit(); } );
-});
-
-gulp.task('default', ['develop']);
+gulp.task('default', ['watch']);

@@ -10,7 +10,7 @@
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
     <!-- build:remove -->
-    <script src="http://localhost:35729/livereload.js"></script>
+    <script>require('electron-connect').client.create()</script> 
     <!-- end:build -->
   </body>
 </html>
