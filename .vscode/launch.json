@@ -2,7 +2,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch",
+			"name": "Iniciar",
 			"type": "node",
 			"request": "launch",
 			"program": "${workspaceRoot}/main.js",
@@ -22,12 +22,12 @@
 			"outDir": null
 		},
 		{
-			"name": "Attach",
+			"name": "Asociar",
 			"type": "node",
 			"request": "attach",
 			"port": 5858,
 			"address": "localhost",
-			"restart": false,
+			"restart": true,
 			"sourceMaps": false,
 			"outDir": null,
 			"localRoot": "${workspaceRoot}",

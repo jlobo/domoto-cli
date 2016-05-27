@@ -1,11 +1,9 @@
-'use strict';
+const path = require('path');
 
-let path = require('path')
-
-var Config = function Config() {
+const Config = function Config() {
   this.env = process.env.NODE_ENV || 'development';
-  this.isDevelopment = this.env == 'development';
-  this.root = path.normalize(__dirname + '/..');
+  this.isDevelopment = this.env === 'development';
+  this.root = path.resolve(__dirname, '/..');
 };
 
 module.exports = new Config();
