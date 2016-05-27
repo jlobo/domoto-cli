@@ -3,9 +3,7 @@
 var childProcess = require('child_process');
 var electron = require('electron-prebuilt');
 var { server } = require('electron-connect');
-
 var gulp = require('gulp');
-var debug = require('gulp-debug');
 
 var files = {
     electron: './src/electron/**/*',
