@@ -1,0 +1,24 @@
+{
+  "name": "domoto",
+  "description": "Administrador de dispositivos inteligentes",
+  "main": "",
+  "license": "ISC",
+  "private": true,
+  "authors": [
+    "Jose Lobo"
+  ],
+  "keywords": [
+    "domotica"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "src/static/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Materialize": "materialize#^0.97.6",
+    "socket.io-client": "^1.4.6"
+  }
+}
