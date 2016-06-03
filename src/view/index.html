@@ -35,8 +35,10 @@
   <!-- end:build -->
   
   <!-- build:js /js/lib.js -->
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
   <script type="text/javascript" src="../static/libs/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="../static/libs/Materialize/dist/js/materialize.js"></script>
+  <script>if (window.module) module = window.module;</script>
   <!-- endbuild -->
 </body>
 </html>
