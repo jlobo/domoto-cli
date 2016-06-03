@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const jetpack = require('fs-jetpack');
+const config = require('../app/config');
 
 module.exports = class Window {
   constructor(name, options) {
@@ -30,7 +31,12 @@ module.exports = class Window {
       height: this.options.height,
       minWidth: 300,
       minHeight: 400,
+      icon: process.platform !== 'darwin' ? this.getIcon() : null,
     };
+  }
+
+  getIcon() {
+    return config.getPath('./static/img/icon.', process.platform === 'windows' ? 'ico' : 'png');
   }
 
   saveState() {
