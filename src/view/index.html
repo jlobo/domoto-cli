@@ -2,15 +2,41 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Domoto</title>
+    <link type="text/css" rel="stylesheet" href="../static/libs/Materialize/dist/css/materialize.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="../static/css/style.css"  media="screen,projection"/>
   </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-    <!-- build:remove -->
-    <script src="http://localhost:35729/livereload.js"></script>  
-    <!-- end:build -->
-  </body>
+<body>
+  <nav class="blue darken-2" role="navigation">
+    <div class="nav-wrapper container">
+      <a href="#" class="brand-logo center">Domoto</a>
+      <ul class="right">
+        <li><a href="https://gitlab.com/jloboprs/domoto" class="valign-wrapper">
+            <img src="../static/img/git.png" title="Codigo fuente" alt="Codigo fuente" class="valign">
+        </li></a>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="container">
+    <h5 class="header light">Bienvenidos a domoto</h5>
+  </header>
+
+  <footer class="page-footer white">
+    <div class="footer-copyright">
+      <div class="container black-text">
+      Echo por <a class="teal-text " href="https://gitlab.com/u/jloboprs"><b>Joselo</b></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- build:remove -->
+  <script src="http://localhost:35729/livereload.js"></script>
+  <!-- end:build -->
+  
+  <!-- build:js /js/lib.js -->
+  <script type="text/javascript" src="../static/libs/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="../static/libs/Materialize/dist/js/materialize.js"></script>
+  <!-- endbuild -->
+</body>
 </html>
