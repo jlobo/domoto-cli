@@ -1,6 +1,7 @@
-const { app } = require('electron');
+const { app, protocol } = require('electron');
 const window = require('./window');
 const config = require('../app/config');
+const url = require('url');
 
 let win;
 function createWindow() {
@@ -10,7 +11,20 @@ function createWindow() {
   win.on('closed', () => { win = null; });
 }
 
-app.on('ready', createWindow);
+function intercept(request, callback) {
+  let pathname = url.parse(request.url).pathname;
+  if (!pathname.includes(config.root)) {
+    pathname = config.getPath(pathname);
+  }
+  callback(pathname);
+}
+
+function configureOnReady() {
+  protocol.interceptFileProtocol('file', intercept);
+  createWindow();
+}
+
+app.on('ready', configureOnReady);
 
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
