@@ -1,11 +1,11 @@
 body {
-     display: flex;
-     min-height: 100vh;
-     flex-direction: column;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 main {
-     flex: 1 0 auto;
+  flex: 1 0 auto;
 }
 
 p {
@@ -28,13 +28,32 @@ footer.page-footer {
   padding-top: 0;
 }
 
-.nav-wrapper .valign-wrapper {
-    height: 100%;
-    vertical-align: middle;
-    display: inline-block;
+nav .valign-wrapper {
+  height: 100%;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.nav-wrapper .valign {
-    vertical-align: middle;
-    display: inline-block;
+nav .valign {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/*Menu lateral*/
+@media (min-width: 991px) {
+  main, header, footer, nav {
+    padding-left: 240px;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media only screen and (min-width: 993px) {
+  .container {
+    width: 85%;
+  }
 }
