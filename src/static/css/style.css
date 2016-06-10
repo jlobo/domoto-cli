@@ -64,3 +64,27 @@ nav .valign {
   -webkit-transform: translateX(-105%) !important;
           transform: translateX(-105%) !important;
 }
+
+/*Menu icons*/
+.side-nav .collapsible-header,
+.side-nav.fixed .collapsible-header,
+.side-nav.fixed a {
+  padding: 0 15px;
+}
+
+.collapsible-header i.secondary-content,
+i.secondary-content {
+    float: right;
+    color: inherit;
+    margin: 0px;
+}
+
+nav,
+.side-nav.fixed a {
+    color: #f5f5f5;
+}
+
+.side-nav .collapsible-body,
+.side-nav.fixed .collapsible-body {
+  background-color: #424242;
+}

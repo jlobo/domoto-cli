@@ -11,12 +11,16 @@
   <nav id="nav" class="blue darken-2" role="navigation">
     <a href="#" class="brand-logo center">Domoto</a>
      
-    <ul id="menu" class="side-nav fixed grey darken-4 blue-grey-text text-lighten-4">
-      <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
-      <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
-      <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
-      <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
-      <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
+    <ul id="menu" class="side-nav fixed grey darken-4">
+      <li><a id="btnMenuCollapse" href="#" class="center-align"><i class="material-icons secondary-content">close</i><b>Menu</b></a></li>
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li>
+            <div class="collapsible-header truncate"><i class="material-icons">power_settings_new</i>First<i class="material-icons secondary-content">settings</i></div>
+            <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+          <li>
+        </ul>
+      </li>      
     </ul>
 
     <ul class="left">
@@ -41,7 +45,6 @@
   </header>
   
   <main id="main" class="container">
-    <h3>Hola</h3>
   </main>
 
   <footer id="footer" class="page-footer white">

@@ -1,6 +1,6 @@
 module.exports = new (class IndexView {
   constructor() {
-    this.btnCollapse = $('#btnCollapse');
+    this.btnCollapse = $('#btnCollapse, #btnMenuCollapse');
     this.btnCollapseHidden = $('#btnCollapseHidden');
     this.menu = $('#menu');
     this.layout = $('#main, #header, #footer, #nav');
@@ -11,7 +11,7 @@ module.exports = new (class IndexView {
   init() {
     $(window).on('resize', e => this.onResizeWindow(e));
     this.btnCollapse.on('click', e => this.onClickCollapse(e));
-    this.btnCollapseHidden.sideNav({closeOnClick: true});
+    this.btnCollapseHidden.sideNav();
     this.menu.removeAttr('style');
   }
 
