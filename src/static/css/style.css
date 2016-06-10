@@ -41,19 +41,26 @@ nav .valign {
 
 /*Menu lateral*/
 @media (min-width: 991px) {
-  main, header, footer, nav {
+  main:not(.hide-menu), header:not(.hide-menu),
+  footer:not(.hide-menu), nav:not(.hide-menu) {
     padding-left: 240px;
   }
 }
 
 @media only screen and (min-width: 601px) {
-  .container {
+  .container:not(.hide-menu) {
     width: 90%;
   }
 }
 
 @media only screen and (min-width: 993px) {
-  .container {
+  .container:not(.hide-menu) {
     width: 85%;
   }
+}
+
+.side-nav.hide {
+  display: block !important;
+  -webkit-transform: translateX(-105%) !important;
+          transform: translateX(-105%) !important;
 }

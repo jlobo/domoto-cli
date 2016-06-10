@@ -8,10 +8,10 @@
     <link type="text/css" rel="stylesheet" href="/static/css/style.css"  media="screen,projection"/>
   </head>
 <body>
-  <nav class="blue darken-2" role="navigation">
+  <nav id="nav" class="blue darken-2" role="navigation">
     <a href="#" class="brand-logo center">Domoto</a>
      
-    <ul class="side-nav fixed grey darken-4 blue-grey-text text-lighten-4">
+    <ul id="menu" class="side-nav fixed grey darken-4 blue-grey-text text-lighten-4">
       <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
       <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
       <li><a class="grey-text text-lighten-4" href="#">Menu</a></li>
@@ -21,7 +21,8 @@
 
     <ul class="left">
       <li>
-        <a href="#" class="valign-wrapper show-on-large"><i class="material-icons">menu</i></a>
+        <a id="btnCollapseHidden" href="#" data-activates="menu" class="hide">hidden</a>
+        <a id="btnCollapse" href="#" class="valign-wrapper show-on-large"><i class="material-icons">menu</i></a>
       </li>
     </ul>
       
@@ -34,16 +35,16 @@
     </ul>
   </nav>
 
-  <header class="container">
+  <header id="header" class="container">
     <h3 class="header light blue-text">Bienvenidos a Domoto</h5>
     <h5 class="header light">Desde esta aplicación usted podrá controlar sus dispositivos inteligentes</h5>
   </header>
   
-  <main class="container">
+  <main id="main" class="container">
     <h3>Hola</h3>
   </main>
 
-  <footer class="page-footer white">
+  <footer id="footer" class="page-footer white">
     <div class="footer-copyright">
       <div class="container black-text">
       Echo por <a class="teal-text " href="https://gitlab.com/u/jloboprs"><b>Joselo</b></a>
@@ -58,11 +59,14 @@
   <!-- end:build -->
   
   <!-- build:js /js/lib.js -->
-  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script>if (typeof module === 'object') {window.__module__ = module; module = undefined;}</script>
   <script type="text/javascript" src="/static/libs/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="/static/libs/Materialize/dist/js/materialize.js"></script>
-  <script>if (window.module) module = window.module;</script>
+  <script>if (window.__module__) module = window.__module__;</script>
   <!-- endbuild -->
-  
+
+  <!-- build:js /js/app.js -->
+  <script type="text/javascript" src="/app/IndexView.js"></script>
+  <!-- endbuild -->
 </body>
 </html>
