@@ -7,7 +7,7 @@ const { app } = require('electron').remote;
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
-module.exports = class Plugin extends EventEmitter {
+module.exports = class Extension extends EventEmitter {
   constructor(enforcer) {
     if (enforcer !== singletonEnforcer)
       throw new Error('Cannot construct singleton');
@@ -20,25 +20,25 @@ module.exports = class Plugin extends EventEmitter {
 
   static get instance() {
     if (!this[singleton])
-      this[singleton] = new Plugin(singletonEnforcer);
+      this[singleton] = new Extension(singletonEnforcer);
 
     return this[singleton];
   }
 
-  install(...packages) {
+  install(extension) {
     this._loadNpm()
-      .thenResolve(packages)
+      .thenResolve(extension)
       .then(this._installNpm)
       .spread((installs, info) => this._saveInstall(installs, info))
       .then(data => this.emit('installed', data))
       .fail(err => this.emit('error', err));
   }
 
-  remove(...packages) {
+  remove(extension) {
     this._loadNpm()
-      .thenResolve(packages)
+      .thenResolve(extension)
       .then(this._removeNpm)
-      .thenResolve(packages)
+      .thenResolve(extension)
       .then(data => this._saveRemove(data))
       .then(data => this.emit('removed', data))
       .fail(err => this.emit('error', err));
@@ -49,7 +49,7 @@ module.exports = class Plugin extends EventEmitter {
       return this._list;
 
     try {
-      return (this._list = this.userDataDir.read('plugin.json', 'json') || {});
+      return (this._list = this.userDataDir.read('extension.json', 'json') || {});
     }
     catch (err) { console.error(err); }
 
@@ -57,7 +57,7 @@ module.exports = class Plugin extends EventEmitter {
   }
 
   _saveList() {
-    this.userDataDir.write('plugin.json', this.list, { atomic: true });
+    this.userDataDir.write('extension.json', this.list, { atomic: true });
   }
 
   _loadNpm() {
@@ -71,29 +71,28 @@ module.exports = class Plugin extends EventEmitter {
     npm.on('log', console.log);
   }
 
-  _removeNpm(packages) {
-    return q.nfcall(npm.commands.remove, packages);
+  _removeNpm(extension) {
+    return q.nfcall(npm.commands.remove, [extension]);
   }
 
-  _installNpm(packages) {
-    return q.all([q.nfapply(npm.commands.install, packages),
-      q.nfapply(npm.commands.info, packages.concat('version'))]);
+  _installNpm(extension) {
+    return q.all([q.nfcall(npm.commands.install, [extension]),
+      q.nfcall(npm.commands.info, [extension, 'name', 'version']).get(0)]);
   }
 
   _saveInstall(installs, info) {
-    const version = Object.keys(info)[0];
-    const name = info[version].name;
+    const extension = info[Object.keys(info)[0]];
 
-    this.list[name] = version;
+    this.list[extension.name] = extension.version;
     this._saveList();
 
-    return ({ name: name, version: version });
+    return (extension);
   }
 
   _saveRemove(extension) {
-    delete this.list[extension[0]];
+    delete this.list[extension];
     this._saveList();
 
-    return { name: extension[0]};
+    return { name: extension};
   }
 };

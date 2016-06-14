@@ -1,4 +1,4 @@
-const Plugin = require('./plugin');
+const Extension = require('./extension');
 const ItemMenu = require('./itemMenu');
 const EventEmitter = require('events');
 
@@ -7,7 +7,7 @@ module.exports = class Menu extends EventEmitter {
     super();
 
     this.items = [];
-    this.plugin = Plugin.instance;
+    this.extension = Extension.instance;
     this.menu = document.getElementById('menu');
     this.btnCollapse = document.getElementById('btnMenuCollapse');
   }
@@ -15,30 +15,30 @@ module.exports = class Menu extends EventEmitter {
   init() {
     this.menu.removeAttribute('style');
 
-    this.plugin.on('installed', plugin => this.add(plugin.name));
-    this.plugin.on('removed', plugin => this.remove(plugin.name));
+    this.extension.on('installed', extension => this.add(extension.name));
+    this.extension.on('removed', extension => this.remove(extension.name));
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
 
-    const plugins = Object.keys(this.plugin.list);
+    const extensions = Object.keys(this.extension.list);
 
-    for (let i = 0; i < plugins.length; i++)
-      this.add(plugins[i]);
+    for (let i = 0; i < extensions.length; i++)
+      this.add(extensions[i]);
   }
 
-  add(plugin) {
-    const item = this.items[plugin] = new ItemMenu(plugin);
-    item.on('remove', (e, pluginRemove) => this.onRemovePlugin(e, pluginRemove));
+  add(extension) {
+    const item = this.items[extension] = new ItemMenu(extension);
+    item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
 
     item.add(this.menu);
   }
 
-  remove(plugin) {
-    this.items[plugin].remove();
-    delete this.items[plugin];
+  remove(extension) {
+    this.items[extension].remove();
+    delete this.items[extension];
   }
 
-  onRemovePlugin(e, plugin) {
-    this.plugin.remove(plugin);
+  onRemoveExtension(e, extension) {
+    this.extension.remove(extension);
   }
 
   show() {
