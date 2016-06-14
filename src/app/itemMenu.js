@@ -1,17 +1,35 @@
-module.exports = class ItemMenu {
-  constructor() {
+const EventEmitter = require('events');
+
+module.exports = class ItemMenu extends EventEmitter {
+  constructor(plugin) {
+    super();
+
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
 
-    this.element = document.importNode(template.content, true);
-    this._header = this.element.querySelector('.collapsible-header').lastChild;
-    this._body = this.element.querySelector('.collapsible-body');
+    this._plugin = plugin;
+    this._element = document.importNode(template.content, true);
+    this._header = this._element.querySelector('.collapsible-header').lastChild;
+    this._body = this._element.querySelector('.collapsible-body');
+
+    this._setHeader(this._plugin);
+    this._element.querySelector('.collapsible-body li a')
+      .addEventListener('click', (e) => this.emit('remove', e, this._plugin));
   }
 
-  setHeader(header) {
+  add(root) {
+    root.appendChild(this._element);
+    this._element = root.lastElementChild;
+  }
+
+  remove() {
+    this._element.remove();
+  }
+
+  _setHeader(header) {
     this._header.textContent = header;
   }
 
-  setBody(...items) {
+  _setBody(...items) {
     const ul = this._body.appendChild(document.createElement('ul'));
     ul.innerHTML = items.map(item => `<li><a href="#!">${item}</a></li>`).join('');
   }

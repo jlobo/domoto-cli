@@ -16,9 +16,6 @@ module.exports = class Plugin extends EventEmitter {
 
     this.isLoad = false;
     this.userDataDir = jetpack.cwd(app.getPath('userData'));
-
-    this._setLoaded = this._setLoaded.bind(this);
-    this._saveChange = this._saveChange.bind(this);
   }
 
   static get instance() {
@@ -32,8 +29,18 @@ module.exports = class Plugin extends EventEmitter {
     this._loadNpm()
       .thenResolve(packages)
       .then(this._installNpm)
-      .spread(this._saveChange)
-      .then(data => this.emit('add', data))
+      .spread((installs, info) => this._saveInstall(installs, info))
+      .then(data => this.emit('installed', data))
+      .fail(err => this.emit('error', err));
+  }
+
+  remove(...packages) {
+    this._loadNpm()
+      .thenResolve(packages)
+      .then(this._removeNpm)
+      .thenResolve(packages)
+      .then(data => this._saveRemove(data))
+      .then(data => this.emit('removed', data))
       .fail(err => this.emit('error', err));
   }
 
@@ -56,7 +63,7 @@ module.exports = class Plugin extends EventEmitter {
   _loadNpm() {
     return this.isLoad
       ? q.resolve()
-      : q.nfcall(npm.load).then(this._setLoaded);
+      : q.nfcall(npm.load).then(data => this._setLoaded(data));
   }
 
   _setLoaded() {
@@ -64,12 +71,16 @@ module.exports = class Plugin extends EventEmitter {
     npm.on('log', console.log);
   }
 
+  _removeNpm(packages) {
+    return q.nfcall(npm.commands.remove, packages);
+  }
+
   _installNpm(packages) {
     return q.all([q.nfapply(npm.commands.install, packages),
       q.nfapply(npm.commands.info, packages.concat('version'))]);
   }
 
-  _saveChange(installs, info) {
+  _saveInstall(installs, info) {
     const version = Object.keys(info)[0];
     const name = info[version].name;
 
@@ -77,5 +88,12 @@ module.exports = class Plugin extends EventEmitter {
     this._saveList();
 
     return ({ name: name, version: version });
+  }
+
+  _saveRemove(extension) {
+    delete this.list[extension[0]];
+    this._saveList();
+
+    return { name: extension[0]};
   }
 };
