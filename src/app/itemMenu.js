@@ -3,13 +3,14 @@ module.exports = class ItemMenu {
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
     const clone = document.importNode(template.content, true);
 
-    this.header = clone.querySelector('.collapsible-header');
+    this.header = clone.querySelector('.collapsible-header').lastChild;
     this.body = clone.querySelector('.collapsible-body');
+
     document.getElementById('menu').appendChild(clone);
   }
 
   setHeader(header) {
-    this.header.appendChild(document.createTextNode(header));
+    this.header.textContent = header;
   }
 
   setBody(...items) {

@@ -21,9 +21,8 @@ module.exports = class Plugin {
   }
 
   get list() {
-    if (this._list) {
+    if (this._list)
       return this._list;
-    }
 
     try {
       return (this._list = this.userDataDir.read('plugin.json', 'json') || {});

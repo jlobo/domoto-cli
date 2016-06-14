@@ -67,7 +67,7 @@ module.exports = {
     "block-scoped-var": 0, // see Babel section
     "complexity": 0,
     "consistent-return": 1,
-    "curly": [1, "all"],
+    "curly": [1, "multi-or-nest", "consistent"],
     "default-case": 0,
     "dot-notation": [1, { "allowKeywords": true, "allowPattern": "" }],
     "dot-location": [1, "property"],
@@ -202,6 +202,6 @@ module.exports = {
     "max-params": 0,
     "max-statements": 0,
     "no-bitwise": 1,
-    "no-plusplus": 1,
+    "no-plusplus": 0,
   }
 };
