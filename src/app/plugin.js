@@ -1,10 +1,19 @@
-const npm = require('npm');
 const q = require('q');
-const { app } = require('electron').remote;
+const npm = require('npm');
 const jetpack = require('fs-jetpack');
+const EventEmitter = require('events');
+const { app } = require('electron').remote;
 
-module.exports = class Plugin {
-  constructor() {
+const singleton = Symbol();
+const singletonEnforcer = Symbol();
+
+module.exports = class Plugin extends EventEmitter {
+  constructor(enforcer) {
+    if (enforcer !== singletonEnforcer)
+      throw new Error('Cannot construct singleton');
+
+    super();
+
     this.isLoad = false;
     this.userDataDir = jetpack.cwd(app.getPath('userData'));
 
@@ -12,12 +21,20 @@ module.exports = class Plugin {
     this._saveChange = this._saveChange.bind(this);
   }
 
+  static get instance() {
+    if (!this[singleton])
+      this[singleton] = new Plugin(singletonEnforcer);
+
+    return this[singleton];
+  }
+
   install(...packages) {
-    return this._loadNpm()
+    this._loadNpm()
       .thenResolve(packages)
       .then(this._installNpm)
       .spread(this._saveChange)
-      .fail(console.log);
+      .then(data => this.emit('add', data))
+      .fail(err => this.emit('error', err));
   }
 
   get list() {
@@ -58,5 +75,7 @@ module.exports = class Plugin {
 
     this.list[name] = version;
     this._saveList();
+
+    return ({ name: name, version: version });
   }
 };

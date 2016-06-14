@@ -6,13 +6,15 @@ module.exports = class Menu extends EventEmitter {
   constructor() {
     super();
 
-    this.plugin = new Plugin();
+    this.plugin = Plugin.instance;
     this.menu = document.getElementById('menu');
     this.btnCollapse = document.getElementById('btnMenuCollapse');
   }
 
   init() {
     this.menu.removeAttribute('style');
+
+    this.plugin.on('add', e => this.onAddPlugin(e));
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
 
     const plugins = Object.keys(this.plugin.list);
@@ -22,6 +24,12 @@ module.exports = class Menu extends EventEmitter {
       item.setHeader(plugins[i]);
       this.add(item);
     }
+  }
+
+  onAddPlugin(plugin) {
+    const item = new ItemMenu();
+    item.setHeader(plugin.name);
+    this.add(item);
   }
 
   add(itemMenu) {
