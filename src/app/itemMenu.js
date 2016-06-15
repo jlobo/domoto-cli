@@ -11,9 +11,7 @@ module.exports = class ItemMenu extends EventEmitter {
     this._header = this._element.querySelector('.collapsible-header').lastChild;
     this._body = this._element.querySelector('.collapsible-body');
 
-    this._setHeader(this._plugin);
-    this._element.querySelector('.collapsible-body li a')
-      .addEventListener('click', (e) => this.emit('remove', e, this._plugin));
+    this._configure();
   }
 
   add(root) {
@@ -23,6 +21,13 @@ module.exports = class ItemMenu extends EventEmitter {
 
   remove() {
     this._element.remove();
+  }
+
+  _configure() {
+    this._setHeader(this._plugin);
+    $('.collapsible:first', this._element).collapsible();
+    this._element.querySelector('.collapsible-body li a')
+      .addEventListener('click', (e) => this.emit('remove', e, this._plugin));
   }
 
   _setHeader(header) {
