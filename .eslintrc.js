@@ -66,7 +66,7 @@ module.exports = {
     "accessor-pairs": 0,
     "block-scoped-var": 0, // see Babel section
     "complexity": 0,
-    "consistent-return": 1,
+    "consistent-return": 0,
     "curly": [1, "multi-or-nest", "consistent"],
     "default-case": 0,
     "dot-notation": [1, { "allowKeywords": true, "allowPattern": "" }],

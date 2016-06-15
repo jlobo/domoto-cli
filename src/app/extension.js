@@ -3,6 +3,7 @@ const npm = require('npm');
 const jetpack = require('fs-jetpack');
 const EventEmitter = require('events');
 const { app } = require('electron').remote;
+const InstallError = require('./installError');
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
@@ -28,6 +29,7 @@ module.exports = class Extension extends EventEmitter {
   install(extension) {
     this._loadNpm()
       .thenResolve(extension)
+      .then(data => this._verifyinstallation(data))
       .then(this._installNpm)
       .spread((installs, info) => this._saveInstall(installs, info))
       .then(data => this.emit('installed', data))
@@ -54,6 +56,13 @@ module.exports = class Extension extends EventEmitter {
     catch (err) { console.error(err); }
 
     return (this._list = {});
+  }
+
+  _verifyinstallation(extension) {
+    if (Object.keys(this.list).includes(extension))
+      throw new InstallError('La extensión ya se encuentra instalada');
+
+    return extension;
   }
 
   _saveList() {
