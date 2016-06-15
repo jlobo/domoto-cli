@@ -29,7 +29,7 @@ module.exports = class Extension extends EventEmitter {
   install(extension) {
     this._loadNpm()
       .thenResolve(extension)
-      .then(data => this._verifyinstallation(data))
+      .then(data => this._verifyInstallation(data))
       .then(this._installNpm)
       .spread((installs, info) => this._saveInstall(installs, info))
       .then(data => this.emit('installed', data))
@@ -58,11 +58,26 @@ module.exports = class Extension extends EventEmitter {
     return (this._list = {});
   }
 
-  _verifyinstallation(extension) {
-    if (Object.keys(this.list).includes(extension))
-      throw new InstallError('La extensión ya se encuentra instalada');
+  _verifyInstallation(extension) {
+    return q.fcall(() => this._verifyDuplicateInstallation(extension))
+      .thenResolve([extension, 'name', 'keywords'])
+      .then(q.denodeify(npm.commands.info))
+      .get(0)
+      .then(this._verifyDomotoInstallation)
+      .thenResolve(extension);
+  }
 
-    return extension;
+  _verifyDomotoInstallation(info) {
+    info = info[Object.keys(info)[0]];
+    if (!info.keywords || !info.keywords.includes('domoto'))
+      throw new InstallError('Lo sentimos, la extensión no es valida para Domoto');
+  }
+
+  _verifyDuplicateInstallation(extension) {
+    if (!Object.keys(this.list).includes(extension))
+      return extension;
+
+    throw new InstallError('La extensión ya se encuentra instalada');
   }
 
   _saveList() {
@@ -90,12 +105,12 @@ module.exports = class Extension extends EventEmitter {
   }
 
   _saveInstall(installs, info) {
-    const extension = info[Object.keys(info)[0]];
+    info = info[Object.keys(info)[0]];
 
-    this.list[extension.name] = extension.version;
+    this.list[info.name] = info.version;
     this._saveList();
 
-    return (extension);
+    return (info);
   }
 
   _saveRemove(extension) {
