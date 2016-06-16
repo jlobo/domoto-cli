@@ -96,6 +96,7 @@ module.exports = class Extension extends EventEmitter {
   }
 
   _removeNpm(extension) {
+    // Agregar --save-optional a la instalación
     return q.nfcall(npm.commands.remove, [extension]);
   }
 

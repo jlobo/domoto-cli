@@ -1,12 +1,14 @@
 const EventEmitter = require('events');
+const Confirm = require('./confirm');
 
 module.exports = class ItemMenu extends EventEmitter {
-  constructor(plugin) {
+  constructor(extension) {
     super();
 
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
 
-    this._plugin = plugin;
+    this.confirm = Confirm.instance;
+    this._extension = extension;
     this._element = document.importNode(template.content, true);
     this._header = this._element.querySelector('.collapsible-header').lastChild;
     this._body = this._element.querySelector('.collapsible-body');
@@ -24,10 +26,15 @@ module.exports = class ItemMenu extends EventEmitter {
   }
 
   _configure() {
-    this._setHeader(this._plugin);
+    this._setHeader(this._extension);
     $('.collapsible:first', this._element).collapsible();
     this._element.querySelector('.collapsible-body li a')
-      .addEventListener('click', (e) => this.emit('remove', e, this._plugin));
+      .addEventListener('click', (e) => this._onClickRemove(e));
+  }
+
+  _onClickRemove(e) {
+    this.confirm('¿Estas seguro de querer eliminar la extensión?', 'Extensiones')
+      .on('confirm', () => this.emit('remove', e, this._extension));
   }
 
   _setHeader(header) {
