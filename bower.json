@@ -20,6 +20,7 @@
   "dependencies": {
     "Materialize": "materialize#^0.97.6",
     "socket.io-client": "^1.4.6",
-    "jquery": "^2.2.4"
+    "jquery": "^2.2.4",
+    "jquery-validation": "^1.15.0"
   }
 }

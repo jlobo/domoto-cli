@@ -88,3 +88,19 @@ nav,
 .side-nav.fixed .collapsible-body {
   background-color: #424242;
 }
+
+/*Validacion*/
+.input-field label {
+    width: 100%;
+}
+
+.input-field label:after {
+    transition-property: all !important;
+    font-size: 0.8rem;
+    transform: none;
+}
+
+.input-field label:not(.active):after {
+  transform: translateY(-140%);
+}
+/*Validacion*/
