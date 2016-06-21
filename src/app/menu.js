@@ -26,7 +26,10 @@ module.exports = class Menu extends EventEmitter {
   }
 
   add(extension) {
-    const item = this.items[extension] = new ItemMenu(extension);
+    const item = this.items[extension] = extension instanceof ItemMenu
+      ? extension
+      : new ItemMenu(extension);
+    
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
 
     item.add(this.menu);

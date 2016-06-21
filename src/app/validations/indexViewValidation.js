@@ -13,7 +13,7 @@ module.exports = class IndexViewValidation extends Validation {
       messages: {
         package: {
           required: 'La extensión es requerida',
-          regx: 'La extensión contiene caracteres inválidos',
+          regex: 'La extensión contiene caracteres inválidos',
         },
       },
     });

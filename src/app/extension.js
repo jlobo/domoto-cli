@@ -27,7 +27,7 @@ module.exports = class Extension extends EventEmitter {
   }
 
   install(extension) {
-    this._verifyInput();
+    this._verifyInput(extension);
 
     this._loadNpm()
       .thenResolve(extension)
@@ -39,7 +39,7 @@ module.exports = class Extension extends EventEmitter {
   }
 
   remove(extension) {
-    this._verifyInput();
+    this._verifyInput(extension);
 
     this._loadNpm()
       .thenResolve(extension)
