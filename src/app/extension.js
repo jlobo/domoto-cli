@@ -27,6 +27,8 @@ module.exports = class Extension extends EventEmitter {
   }
 
   install(extension) {
+    this._verifyInput();
+
     this._loadNpm()
       .thenResolve(extension)
       .then(data => this._verifyInstallation(data))
@@ -37,6 +39,8 @@ module.exports = class Extension extends EventEmitter {
   }
 
   remove(extension) {
+    this._verifyInput();
+
     this._loadNpm()
       .thenResolve(extension)
       .then(this._removeNpm)
@@ -56,6 +60,11 @@ module.exports = class Extension extends EventEmitter {
     catch (err) { console.error(err); }
 
     return (this._list = {});
+  }
+
+  _verifyInput(extension) {
+    if (!extension)
+      throw new TypeError('La extensión es requerida');
   }
 
   _verifyInstallation(extension) {
