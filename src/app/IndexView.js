@@ -1,29 +1,33 @@
+const Menu = require('./menu');
+
+// Cambiar a miniscula el nombre de este archivo
 module.exports = new (class IndexView {
   constructor() {
-    this.btnCollapse = $('#btnCollapse, #btnMenuCollapse');
+    this.btnCollapse = $('#btnCollapse');
     this.btnCollapseHidden = $('#btnCollapseHidden');
-    this.menu = $('#menu');
     this.layout = $('#main, #header, #footer, #nav');
+    this.menu = new Menu();
 
     this.init();
   }
 
   init() {
     $(window).on('resize', e => this.onResizeWindow(e));
+    this.menu.on('collapse', e => this.onClickCollapse(e));
     this.btnCollapse.on('click', e => this.onClickCollapse(e));
+
     this.btnCollapseHidden.sideNav();
-    this.menu.removeAttr('style');
+    this.menu.init();
   }
 
   onResizeWindow() {
-    if (window.innerWidth <= 992) {
+    if (window.innerWidth <= 992)
       this._showMenu();
-    }
   }
 
   onClickCollapse() {
     if (window.innerWidth > 992) {
-      this.menu.toggleClass('hide');
+      this.menu.toggleShow();
       this.layout.toggleClass('hide-menu');
     }
     else {
@@ -33,7 +37,7 @@ module.exports = new (class IndexView {
   }
 
   _showMenu() {
-    this.menu.removeClass('hide');
+    this.menu.show();
     this.layout.removeClass('hide-menu');
   }
 })();
