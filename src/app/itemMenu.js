@@ -7,8 +7,8 @@ module.exports = class ItemMenu extends EventEmitter {
 
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
 
+    this.info = extension;
     this.confirm = Confirm.instance;
-    this._extension = extension;
     this._element = document.importNode(template.content, true);
     this._header = this._element.querySelector('.collapsible-header');
     this._body = this._element.querySelector('.collapsible-body');
@@ -17,6 +17,8 @@ module.exports = class ItemMenu extends EventEmitter {
   }
 
   add(root, first = false) {
+    $('.collapsible:first', this._element).collapsible({ accordion: false });
+
     if (first) {
       root.insertBefore(this._element, root.children[1]);
       this._element = root.firstElementChild;
@@ -32,23 +34,27 @@ module.exports = class ItemMenu extends EventEmitter {
   }
 
   _configure() {
-    $('.collapsible:first', this._element).collapsible();
-    this._setHeader(this._extension);
+    this.setHeader(this.info.name, this.info.icons);
     this._header.addEventListener('click', e => this.emit('click', e));
     this._element.querySelector('.collapsible-body li a').addEventListener('click', e => this._onClickRemove(e));
   }
 
   _onClickRemove(e) {
     this.confirm('¿Estas seguro de querer eliminar la extensión?', 'Extensiones')
-      .on('confirm', () => this.emit('remove', e, this._extension));
+      .on('confirm', () => this.emit('remove', e, this.info.name));
   }
 
-  _setHeader(header) {
-    this._header.lastChild.textContent = header;
+  setHeader(text, icons) {
+    this._header.innerHTML = `${icons && icons.left ? this._getIconHeader(icons.left) : ''}
+      ${icons && icons.right ? this._getIconHeader(icons.right, true) : ''}
+      ${text}`;
   }
 
   _setBody(...items) {
     const ul = this._body.appendChild(document.createElement('ul'));
     ul.innerHTML = items.map(item => `<li><a href="#!">${item}</a></li>`).join('');
+  }
+  _getIconHeader(icon, right = false) {
+    return `<i class="material-icons ${right ? 'secondary-content' : null}">${icon}</i>`;
   }
 };

@@ -34,7 +34,7 @@ module.exports = class Menu extends EventEmitter {
   add(extension, first = false) {
     const item = this.items[extension] = extension instanceof ItemMenu
       ? extension
-      : new ItemMenu(extension);
+      : new ItemMenu({name: extension, icons: {left: 'power_settings_new'}});
 
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
 
@@ -77,6 +77,5 @@ module.exports = class Menu extends EventEmitter {
 
   _onClickItemMenu(e, view) {
     this._changeView(view.body);
-    console.log('click', view.body);
   }
 };
