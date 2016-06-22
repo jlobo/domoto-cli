@@ -35,7 +35,7 @@ module.exports = class Extension extends EventEmitter {
       .then(this._installNpm)
       .spread((installs, info) => this._saveInstall(installs, info))
       .then(data => this.emit('installed', data))
-      .fail(err => this.emit('error', err));
+      .fail(err => this.emit('error', err, extension));
   }
 
   remove(extension) {
@@ -47,7 +47,7 @@ module.exports = class Extension extends EventEmitter {
       .thenResolve(extension)
       .then(data => this._saveRemove(data))
       .then(data => this.emit('removed', data))
-      .fail(err => this.emit('error', err));
+      .fail(err => this.emit('error', err, extension));
   }
 
   get list() {
