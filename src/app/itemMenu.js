@@ -7,18 +7,31 @@ module.exports = class ItemMenu extends EventEmitter {
 
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
 
+    this._bodyElement = null;
     this.info = extension;
     this.confirm = Confirm.instance;
     this._element = document.importNode(template.content, true);
     this._header = this._element.querySelector('.collapsible-header');
-    this._body = this._element.querySelector('.collapsible-body');
 
     this._configure();
   }
 
+  get _body() {
+    if (this._bodyElement)
+      return this._bodyElement;
+
+    this._bodyElement = document.createElement('ul');
+    const div = document.createElement('div');
+    div.classList.add('collapsible-body');
+    div.appendChild(this._bodyElement);
+    this._header.parentElement.appendChild(div);
+
+    return this._bodyElement;
+  }
+
   add(root, first = false) {
     $('.collapsible:first', this._element).collapsible({ accordion: false });
-
+    
     if (first) {
       root.insertBefore(this._element, root.children[1]);
       this._element = root.firstElementChild;
@@ -36,7 +49,6 @@ module.exports = class ItemMenu extends EventEmitter {
   _configure() {
     this.setHeader(this.info.name, this.info.icons);
     this._header.addEventListener('click', e => this.emit('click', e));
-    this._element.querySelector('.collapsible-body li a').addEventListener('click', e => this._onClickRemove(e));
   }
 
   _onClickRemove(e) {
@@ -48,13 +60,26 @@ module.exports = class ItemMenu extends EventEmitter {
     this._header.innerHTML = `${icons && icons.left ? this._getIconHeader(icons.left) : ''}
       ${icons && icons.right ? this._getIconHeader(icons.right, true) : ''}
       ${text}`;
+
+    return this;
   }
 
   _setBody(...items) {
     const ul = this._body.appendChild(document.createElement('ul'));
     ul.innerHTML = items.map(item => `<li><a href="#!">${item}</a></li>`).join('');
   }
+
   _getIconHeader(icon, right = false) {
     return `<i class="material-icons ${right ? 'secondary-content' : null}">${icon}</i>`;
+  }
+
+  setRemoveBody() {
+    const li = document.createElement('li');
+    li.innerHTML = '<a href="#"><i class="material-icons secondary-content">delete</i>Remover</a>';
+    li.firstElementChild.addEventListener('click', e => this._onClickRemove(e));
+
+    this._body.appendChild(li);
+
+    return this;
   }
 };

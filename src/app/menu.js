@@ -27,15 +27,15 @@ module.exports = class Menu extends EventEmitter {
       this.components[i].on('ready', view => this._loadView(view));
 
     const extensions = Object.keys(this.extension.list);
-    for (let i = 0; i < extensions.length; i++)
-      this.add(extensions[i]);
+    for (let i = 0; i < extensions.length; i++) {
+      const item = new ItemMenu({name: extensions[i], icons: {left: 'power_settings_new'}});
+      item.setRemoveBody();
+
+      this.add(item);
+    }
   }
 
-  add(extension, first = false) {
-    const item = this.items[extension] = extension instanceof ItemMenu
-      ? extension
-      : new ItemMenu({name: extension, icons: {left: 'power_settings_new'}});
-
+  add(item, first = false) {
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
 
     item.add(this.menu, first);
