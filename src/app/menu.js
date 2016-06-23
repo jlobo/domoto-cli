@@ -19,7 +19,7 @@ module.exports = class Menu extends EventEmitter {
   init() {
     this.menu.removeAttribute('style');
 
-    this.extension.on('installed', extension => this.add(extension.name));
+    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name)));
     this.extension.on('removed', extension => this.remove(extension.name));
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
 
@@ -27,17 +27,13 @@ module.exports = class Menu extends EventEmitter {
       this.components[i].on('ready', view => this._loadView(view));
 
     const extensions = Object.keys(this.extension.list);
-    for (let i = 0; i < extensions.length; i++) {
-      const item = new ItemMenu({name: extensions[i], icons: {left: 'power_settings_new'}});
-      item.setRemoveBody();
-
-      this.add(item);
-    }
+    for (let i = 0; i < extensions.length; i++)
+      this.add(this._createItemMenu(extensions[i]).setRemoveBody());
   }
 
   add(item, first = false) {
+    this.items[item.info.name] = item;
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
-
     item.add(this.menu.lastElementChild.firstElementChild, first);
   }
 
@@ -56,6 +52,10 @@ module.exports = class Menu extends EventEmitter {
 
   toggleShow() {
     this.menu.classList.toggle('hide');
+  }
+
+  _createItemMenu(name) {
+    return new ItemMenu({name: name, icons: {left: 'power_settings_new'}});
   }
 
   _changeView(body) {

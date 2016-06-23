@@ -2,13 +2,13 @@ const EventEmitter = require('events');
 const Confirm = require('./confirm');
 
 module.exports = class ItemMenu extends EventEmitter {
-  constructor(extension) {
+  constructor(info) {
     super();
 
     const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
 
     this._bodyElement = null;
-    this.info = extension;
+    this.info = info;
     this.confirm = Confirm.instance;
     this._element = document.importNode(template.content, true);
     this._header = this._element.querySelector('.collapsible-header');
