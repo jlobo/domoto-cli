@@ -30,8 +30,6 @@ module.exports = class ItemMenu extends EventEmitter {
   }
 
   add(root, first = false) {
-    $('.collapsible:first', this._element).collapsible({ accordion: false });
-    
     if (first) {
       root.insertBefore(this._element, root.children[1]);
       this._element = root.firstElementChild;
@@ -57,9 +55,9 @@ module.exports = class ItemMenu extends EventEmitter {
   }
 
   setHeader(text, icons) {
-    this._header.innerHTML = `${icons && icons.left ? this._getIconHeader(icons.left) : ''}
-      ${icons && icons.right ? this._getIconHeader(icons.right, true) : ''}
-      ${text}`;
+    this._header.innerHTML = [icons && icons.left ? this._getIconHeader(icons.left) : '',
+      icons && icons.right ? this._getIconHeader(icons.right, true) : '',
+      text].join('');
 
     return this;
   }

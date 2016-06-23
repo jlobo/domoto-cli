@@ -38,7 +38,7 @@ module.exports = class Menu extends EventEmitter {
   add(item, first = false) {
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
 
-    item.add(this.menu, first);
+    item.add(this.menu.lastElementChild.firstElementChild, first);
   }
 
   remove(extension) {
