@@ -10,7 +10,7 @@ module.exports = class Menu extends EventEmitter {
     this.items = [];
     this.visibleBody = null;
     this.extension = Extension.instance;
-    this.components = [new InstallView(), new InstallView()];
+    this.components = [new InstallView()];
     this.menu = document.getElementById('menu');
     this.btnCollapse = document.getElementById('btnMenuCollapse');
     this.main = document.getElementById('main');
@@ -19,7 +19,7 @@ module.exports = class Menu extends EventEmitter {
   init() {
     this.menu.removeAttribute('style');
 
-    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name)));
+    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name).setRemoveBody()));
     this.extension.on('removed', extension => this.remove(extension.name));
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
 
