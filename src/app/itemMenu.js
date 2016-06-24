@@ -5,28 +5,24 @@ module.exports = class ItemMenu extends EventEmitter {
   constructor(info) {
     super();
 
-    const template = document.getElementById('itemMenuTemplate').import.querySelector('template');
-
     this._bodyElement = null;
     this.info = info;
     this.confirm = Confirm.instance;
-    this._element = document.importNode(template.content, true);
-    this._header = this._element.querySelector('.collapsible-header');
 
-    this._configure();
+    this._element = document.createElement('li');
+    this._element.classList.add('bold');
+    this._element.innerHTML = '<div class="collapsible-header waves-effect waves-light truncate"></div>';
+    this._header = this._element.firstElementChild;
+    this._header.addEventListener('click', e => this.emit('click', e));
+    this.setHeader(info.name, info.icons);
   }
 
-  get _body() {
-    if (this._bodyElement)
-      return this._bodyElement;
+  setHeader(text, icons) {
+    this._header.innerHTML = [icons && icons.left ? this._getIconHeader(icons.left) : '',
+      icons && icons.right ? this._getIconHeader(icons.right, true) : '',
+      text].join('');
 
-    this._bodyElement = document.createElement('ul');
-    const div = document.createElement('div');
-    div.classList.add('collapsible-body');
-    div.appendChild(this._bodyElement);
-    this._header.parentElement.appendChild(div);
-
-    return this._bodyElement;
+    return this;
   }
 
   add(root, first = false) {
@@ -44,22 +40,27 @@ module.exports = class ItemMenu extends EventEmitter {
     this._element.remove();
   }
 
-  _configure() {
-    this.setHeader(this.info.name, this.info.icons);
-    this._header.addEventListener('click', e => this.emit('click', e));
-  }
+  setRemoveBody() {
+    const li = document.createElement('li');
+    li.innerHTML = '<a href="#"><i class="material-icons secondary-content">delete</i>Remover</a>';
+    li.firstElementChild.addEventListener('click', e => this._onClickRemove(e));
 
-  _onClickRemove(e) {
-    this.confirm('¿Estas seguro de querer eliminar la extensión?', 'Extensiones')
-      .on('confirm', () => this.emit('remove', e, this.info.name));
-  }
-
-  setHeader(text, icons) {
-    this._header.innerHTML = [icons && icons.left ? this._getIconHeader(icons.left) : '',
-      icons && icons.right ? this._getIconHeader(icons.right, true) : '',
-      text].join('');
+    this._body.appendChild(li);
 
     return this;
+  }
+
+  get _body() {
+    if (this._bodyElement)
+      return this._bodyElement;
+
+    this._bodyElement = document.createElement('ul');
+    const div = document.createElement('div');
+    div.classList.add('collapsible-body');
+    div.appendChild(this._bodyElement);
+    this._header.parentElement.appendChild(div);
+
+    return this._bodyElement;
   }
 
   _setBody(...items) {
@@ -71,13 +72,8 @@ module.exports = class ItemMenu extends EventEmitter {
     return `<i class="material-icons ${right ? 'secondary-content' : null}">${icon}</i>`;
   }
 
-  setRemoveBody() {
-    const li = document.createElement('li');
-    li.innerHTML = '<a href="#"><i class="material-icons secondary-content">delete</i>Remover</a>';
-    li.firstElementChild.addEventListener('click', e => this._onClickRemove(e));
-
-    this._body.appendChild(li);
-
-    return this;
+  _onClickRemove(e) {
+    this.confirm('¿Estas seguro de querer eliminar la extensión?', 'Extensiones')
+      .on('confirm', () => this.emit('remove', e, this.info.name));
   }
 };
