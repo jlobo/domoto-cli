@@ -10,10 +10,9 @@ module.exports = class Confirm extends EventEmitter {
       throw new Error('Cannot construct singleton');
 
     super();
-    const template = document.getElementById('confirmTemplate').import.querySelector('template');
 
     this._emiter = null;
-    this._modal = document.importNode(template.content, true);
+    this._modal = this._getModal();
     this._header = this._modal.querySelector('h4');
     this._message = this._modal.querySelector('p');
     this._cancel = this._modal.querySelector('a:first-child');
@@ -44,6 +43,21 @@ module.exports = class Confirm extends EventEmitter {
 
     this._cancel.addEventListener('click', e => this._onClick(e, 'cancel'));
     this._confirm.addEventListener('click', e => this._onClick(e, 'confirm'));
+  }
+
+  _getModal() {
+    const template = document.createElement('template');
+    template.innerHTML = `<div class="modal">
+      <div class="modal-content">
+        <h4>Confirmación</h4>
+        <p>¿Estas seguro?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="waves-effect btn-flat">Cancelar</a>
+        <a href="#" class="waves-effect waves-teal btn-flat">Confirmar</a>
+      </div>
+    </div>`;
+    return template.content;
   }
 
   _onClick(e, event) {
