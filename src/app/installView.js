@@ -11,20 +11,18 @@ module.exports = class installView extends EventEmitter {
   constructor() {
     super();
 
-    this.view = null;
     this.form = null;
     this.package = null;
     this.validation = null;
     this.extension = Extension.instance;
-    this.itemMenu = new ItemMenu('main');
-    this._template = new ImportTemplate(config.getPath('/view/templates/install.html'));
-    this._template.on('load', element => this._init(element));
+    this.itemMenu = new ItemMenu({name: 'Main', icons: {left: 'home'}});
+    this.body = new ImportTemplate(config.getPath('/view/templates/install.html'));
+    this.body.on('load', element => this._init(element));
   }
 
   _init() {
-    this.view = this._template.element;
-    this.form = this.view.querySelector('form');
-    this.package = this.view.getElementById('package');
+    this.form = this.body.document.querySelector('form');
+    this.package = this.body.document.getElementById('package');
     this.validation = new IndexViewValidation(this.form);
 
     this.extension.on('error', (err, extension) => this._extensionError(err, extension));

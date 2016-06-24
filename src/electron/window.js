@@ -20,7 +20,7 @@ module.exports = class Window {
     try {
       state = this.userDataDir.read(this.filename, 'json');
     }
-    catch (err) { console.log('Error'); }
+    catch (err) { console.error(err); }
 
     return Object.assign({}, this.getDefaultState(), state);
   }
