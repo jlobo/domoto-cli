@@ -15,7 +15,7 @@ module.exports = class installView extends EventEmitter {
     this.package = null;
     this.validation = null;
     this.extension = Extension.instance;
-    this.itemMenu = new ItemMenu({name: 'Main', icons: {left: 'home'}});
+    this.itemMenu = new ItemMenu('main').setHeader('Main', {left: 'home'});
     this.body = new ImportTemplate(config.getPath('/view/templates/install.html'));
     this.body.on('load', element => this._init(element));
   }

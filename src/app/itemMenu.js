@@ -2,19 +2,17 @@ const EventEmitter = require('events');
 const Confirm = require('./confirm');
 
 module.exports = class ItemMenu extends EventEmitter {
-  constructor(info) {
+  constructor(code) {
     super();
 
-    this._bodyElement = null;
-    this.info = info;
+    this.code = code;
     this.confirm = Confirm.instance;
-
+    this._bodyElement = null;
     this._element = document.createElement('li');
     this._element.classList.add('bold');
     this._element.innerHTML = '<div class="collapsible-header waves-effect waves-light truncate"></div>';
     this._header = this._element.firstElementChild;
     this._header.addEventListener('click', e => this.emit('click', e));
-    this.setHeader(info.name, info.icons);
   }
 
   setHeader(text, icons) {
@@ -74,6 +72,6 @@ module.exports = class ItemMenu extends EventEmitter {
 
   _onClickRemove(e) {
     this.confirm('¿Estas seguro de querer eliminar la extensión?', 'Extensiones')
-      .on('confirm', () => this.emit('remove', e, this.info.name));
+      .on('confirm', () => this.emit('remove', e, this.code));
   }
 };

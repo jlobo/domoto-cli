@@ -14,7 +14,7 @@ module.exports = class ExtensionManager {
   }
 
   init() {
-    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name).setRemoveBody()));
+    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name)));
     this.extension.on('removed', extension => this.remove(extension.name));
 
     for (let i = 0; i < this.components.length; i++)
@@ -22,7 +22,7 @@ module.exports = class ExtensionManager {
 
     const extensions = Object.keys(this.extension.list);
     for (let i = 0; i < extensions.length; i++)
-      this.add(this._createItemMenu(extensions[i]).setRemoveBody());
+      this.add(this._createItemMenu(extensions[i]));
   }
 
   _loadView(view) {
@@ -34,7 +34,7 @@ module.exports = class ExtensionManager {
   }
 
   add(item, first = false) {
-    this.items[item.info.name] = item;
+    this.items[item.code] = item;
     item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
     this.menu.add(item, first);
   }
@@ -49,7 +49,9 @@ module.exports = class ExtensionManager {
   }
 
   _createItemMenu(name) {
-    return new ItemMenu({name: name, icons: {left: 'power_settings_new'}});
+    return new ItemMenu(name)
+      .setHeader(name, {left: 'power_settings_new'})
+      .setRemoveBody();
   }
 
   _changeView(body) {
