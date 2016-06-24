@@ -1,4 +1,6 @@
 const Menu = require('./menu');
+const ExtensionManager = require('./extensionManager');
+
 
 // Cambiar a miniscula el nombre de este archivo
 module.exports = new (class IndexView {
@@ -6,7 +8,8 @@ module.exports = new (class IndexView {
     this.btnCollapse = $('#btnCollapse');
     this.btnCollapseHidden = $('#btnCollapseHidden');
     this.layout = $('#main, #header, #footer, #nav');
-    this.menu = new Menu();
+    this.menu = Menu.instance;
+    this.extensionManager = new ExtensionManager();
 
     this.init();
   }
@@ -17,7 +20,7 @@ module.exports = new (class IndexView {
     this.btnCollapse.on('click', e => this.onClickCollapse(e));
 
     this.btnCollapseHidden.sideNav();
-    this.menu.init();
+    this.extensionManager.init();
   }
 
   onResizeWindow() {
