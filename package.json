@@ -1,5 +1,5 @@
 {
-  "name": "domoto",
+  "name": "domoto-cli",
   "version": "0.0.1",
   "description": "Administrador de dispositivos inteligentes con el cual se permite aumentar el comportamiento de los dispositivos buscando la interacción entre los mismos",
   "scripts": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:jloboprs/domoto.git"
+    "url": "git@gitlab.com:jloboprs/domoto-cli.git"
   },
   "keywords": [
     "domotica"
