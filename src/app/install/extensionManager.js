@@ -1,4 +1,4 @@
-const Menu = require('./menu');
+const Menu = require('../menu');
 const ItemMenu = require('domoto/itemMenu');
 const Extension = require('./extension');
 const InstallView = require('./installView');

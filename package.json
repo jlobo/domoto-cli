@@ -20,6 +20,7 @@
     "gulp-livereload": "^3.8.1"
   },
   "dependencies": {
+    "domoto": "^0.0.2",
     "fs-jetpack": "^0.9.1",
     "npm": "^3.9.5",
     "q": "^1.4.1"
