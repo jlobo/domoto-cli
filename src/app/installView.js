@@ -1,11 +1,11 @@
 const IndexViewValidation = require('./validations/indexViewValidation');
-const ImportTemplate = require('./importTemplate');
+const ImportTemplate = require('domoto/importTemplate');
 const InstallError = require('./installError');
 const Extension = require('./extension');
-const ItemMenu = require('./itemMenu');
+const ItemMenu = require('domoto/itemMenu');
 const EventEmitter = require('events');
 const config = require('./config');
-const alert = require('./alert');
+const alert = require('domoto/alert');
 
 module.exports = class installView extends EventEmitter {
   constructor() {
