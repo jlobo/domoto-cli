@@ -1,5 +1,5 @@
 const Menu = require('./menu');
-const ExtensionManager = require('./extensionManager');
+const ExtensionManager = require('./install/extensionManager');
 
 
 // Cambiar a miniscula el nombre de este archivo

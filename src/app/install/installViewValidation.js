@@ -1,6 +1,6 @@
-const Validation = require('./validation');
+const Validation = require('../validation');
 
-module.exports = class IndexViewValidation extends Validation {
+module.exports = class InstallViewValidation extends Validation {
   constructor(form) {
     super(form);
   }

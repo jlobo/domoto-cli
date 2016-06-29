@@ -4,10 +4,11 @@ module.exports = new (class config {
   constructor() {
     this.env = process.env.NODE_ENV || 'development';
     this.isDevelopment = this.env === 'development';
-    this.root = path.resolve(__dirname, '..');
+    this.root = path.resolve(__dirname, '../..');
+    this.source = path.resolve(__dirname, '..');
   }
 
   getPath(...paths) {
-    return path.join(this.root, paths.join(''));
+    return path.join(this.source, paths.join(''));
   }
 })();
