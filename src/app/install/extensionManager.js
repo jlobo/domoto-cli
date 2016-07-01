@@ -2,6 +2,7 @@ const Menu = require('../menu');
 const ItemMenu = require('domoto/itemMenu');
 const Extension = require('./extension');
 const InstallView = require('./installView');
+const MiaCucina = require('domoto-mia-cucina');
 
 module.exports = class ExtensionManager {
   constructor() {
@@ -9,7 +10,7 @@ module.exports = class ExtensionManager {
     this.visibleBody = null;
     this.menu = Menu.instance;
     this.extension = Extension.instance;
-    this.components = [new InstallView()];
+    this.components = [new InstallView(), new MiaCucina()];
     this.main = document.getElementById('main');
   }
 
@@ -49,9 +50,12 @@ module.exports = class ExtensionManager {
   }
 
   _createItemMenu(name) {
-    return new ItemMenu(name)
-      .setHeader(name, {left: 'power_settings_new'})
-      .setRemoveBody();
+    const item = new ItemMenu(name);
+    item.description = name;
+    item.addLeftIcon('power_settings_new');
+    item.setRemoveBody();
+
+    return item;
   }
 
   _changeView(body) {
