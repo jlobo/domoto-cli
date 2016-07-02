@@ -85,7 +85,7 @@ module.exports = class InstallManager extends EventEmitter {
   _loadNpm() {
     return this.isLoad
       ? q.resolve()
-      : q.nfcall(npm.load).then(data => this._setLoaded(data));
+      : q.nfcall(npm.load, {'save-optional': true}).then(data => this._setLoaded(data));
   }
 
   _setLoaded() {
@@ -116,7 +116,6 @@ module.exports = class InstallManager extends EventEmitter {
   }
 
   _removeNpm(extensionName) {
-    // Agregar --save-optional a la instalación
     return q.nfcall(npm.commands.remove, [extensionName]);
   }
 
