@@ -7,6 +7,7 @@ const InstallError = require('./installError');
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
+const instanceKey = Symbol('instance');
 
 module.exports = class Extension extends EventEmitter {
   constructor(enforcer) {
@@ -50,6 +51,12 @@ module.exports = class Extension extends EventEmitter {
       .fail(err => this.emit('error', err, extension));
   }
 
+  * getInstances() {
+    const extensions = Object.keys(this.list);
+    for (const extension of extensions)
+      yield this.require(extension);
+  }
+
   get list() {
     if (this._list)
       return this._list;
@@ -60,6 +67,14 @@ module.exports = class Extension extends EventEmitter {
     catch (err) { console.error(err); }
 
     return (this._list = {});
+  }
+
+  require(name) {
+    const extension = this.list[name];
+    if (!extension)
+      return null;
+
+    return extension[instanceKey] || (extension[instanceKey] = new (require(name))());
   }
 
   _verifyInput(extension) {
@@ -117,16 +132,17 @@ module.exports = class Extension extends EventEmitter {
   _saveInstall(installs, info) {
     info = info[Object.keys(info)[0]];
 
-    this.list[info.name] = info.version;
+    this.list[info.name] = info;
     this._saveList();
 
-    return (info);
+    return (this.require(info.name));
   }
 
-  _saveRemove(extension) {
-    delete this.list[extension];
+  _saveRemove(name) {
+    const extension = this.require(name);
+    delete this.list[name];
     this._saveList();
 
-    return { name: extension};
+    return extension;
   }
 };

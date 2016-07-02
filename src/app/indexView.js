@@ -20,7 +20,6 @@ module.exports = new (class IndexView {
     this.btnCollapse.on('click', e => this.onClickCollapse(e));
 
     this.btnCollapseHidden.sideNav();
-    this.extensionManager.init();
   }
 
   onResizeWindow() {

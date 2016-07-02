@@ -1,61 +1,38 @@
 const Menu = require('../menu');
-const ItemMenu = require('domoto/itemMenu');
 const Extension = require('./extension');
 const InstallView = require('./installView');
-const MiaCucina = require('domoto-mia-cucina');
 
 module.exports = class ExtensionManager {
   constructor() {
-    this.items = [];
     this.visibleBody = null;
     this.menu = Menu.instance;
     this.extension = Extension.instance;
-    this.components = [new InstallView(), new MiaCucina()];
+    this.components = [new InstallView()];
     this.main = document.getElementById('main');
+
+    this.extension.on('removed', extension => this.remove(extension));
+    this.extension.on('installed', extension => this._loadExtension(extension));
+
+    this._loadExtension(...this.components);
+    this._loadExtension(...this.extension.getInstances());
   }
 
-  init() {
-    this.extension.on('installed', extension => this.add(this._createItemMenu(extension.name)));
-    this.extension.on('removed', extension => this.remove(extension.name));
-
-    for (let i = 0; i < this.components.length; i++)
-      this.components[i].on('ready', view => this._loadView(view));
-
-    const extensions = Object.keys(this.extension.list);
-    for (let i = 0; i < extensions.length; i++)
-      this.add(this._createItemMenu(extensions[i]));
-  }
-
-  _loadView(view) {
-    view.itemMenu.on('click', e => this._onClickItemMenu(e, view));
-    this.add(view.itemMenu, true);
-
-    this._changeView(view.body);
-    view.body.add(this.main);
-  }
-
-  add(item, first = false) {
-    this.items[item.code] = item;
-    item.on('remove', (e, extensionRemove) => this.onRemoveExtension(e, extensionRemove));
-    this.menu.add(item, first);
+  add(extension) {
+    extension.itemMenu.on('click', () => this._changeView(extension.body));
+    extension.itemMenu.on('remove', () => this.extension.remove(extension.itemMenu.code));
+    this.menu.add(extension.itemMenu);
+    this._changeView(extension.body);
+    extension.body.add(this.main);
   }
 
   remove(extension) {
-    this.items[extension].remove();
-    delete this.items[extension];
+    extension.itemMenu.remove();
+    extension.body.remove();
   }
 
-  onRemoveExtension(e, extension) {
-    this.extension.remove(extension);
-  }
-
-  _createItemMenu(name) {
-    const item = new ItemMenu(name);
-    item.description = name;
-    item.addLeftIcon('power_settings_new');
-    item.setRemoveBody();
-
-    return item;
+  _loadExtension(...extensions) {
+    for (const extension of extensions)
+      extension.on('ready', () => this.add(extension));
   }
 
   _changeView(body) {
@@ -64,9 +41,5 @@ module.exports = class ExtensionManager {
 
     body.show();
     this.visibleBody = body;
-  }
-
-  _onClickItemMenu(e, view) {
-    this._changeView(view.body);
   }
 };
