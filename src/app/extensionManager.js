@@ -1,12 +1,12 @@
-const Menu = require('../menu');
-const Extension = require('./extension');
-const InstallComponent = require('./installComponent');
+const Menu = require('./menu');
+const InstallManager = require('./installManager');
+const InstallComponent = require('./install/installComponent');
 
 module.exports = class ExtensionManager {
   constructor() {
     this.visibleBody = null;
     this.menu = Menu.instance;
-    this.extension = Extension.instance;
+    this.extension = InstallManager.instance;
     this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
 
@@ -14,7 +14,7 @@ module.exports = class ExtensionManager {
     this.extension.on('installed', extension => this._loadExtension(extension));
 
     this._loadExtension(...this.components);
-    this._loadExtension(...this.extension.getInstances());
+    this._loadExtension(...this.extension.getExtensions());
   }
 
   add(extension) {

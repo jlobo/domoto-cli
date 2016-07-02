@@ -1,5 +1,5 @@
 const Menu = require('./menu');
-const ExtensionManager = require('./install/extensionManager');
+const ExtensionManager = require('./extensionManager');
 
 // Cambiar a miniscula el nombre de este archivo
 module.exports = new (class IndexView {

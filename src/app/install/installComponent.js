@@ -1,7 +1,7 @@
 const InstallComponentValidation = require('./installComponentValidation');
 const ImportTemplate = require('domoto/importTemplate');
-const InstallError = require('./installError');
-const Extension = require('./extension');
+const InstallError = require('../installError');
+const InstallManager = require('../installManager');
 const ItemMenu = require('domoto/itemMenu');
 const EventEmitter = require('events');
 const config = require('../config');
@@ -14,7 +14,7 @@ module.exports = class InstallComponent extends EventEmitter {
     this.form = null;
     this.package = null;
     this.validation = null;
-    this.extension = Extension.instance;
+    this.extension = InstallManager.instance;
 
     this.itemMenu = new ItemMenu('main');
     this.itemMenu.description = 'Main';
