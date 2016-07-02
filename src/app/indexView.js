@@ -8,7 +8,7 @@ module.exports = new (class IndexView {
     this.btnCollapseHidden = $('#btnCollapseHidden');
     this.layout = $('#main, #header, #footer, #nav');
     this.menu = Menu.instance;
-    this.extensionManager = new ExtensionManager();
+    this.extensionManager = ExtensionManager.instance;
 
     this.init();
   }

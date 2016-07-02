@@ -16,8 +16,8 @@ module.exports = class Menu extends EventEmitter {
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
   }
 
-  add(item, first = false) {
-    item.add(this.menu.lastElementChild.firstElementChild, first);
+  add(item) {
+    item.add(this.menu.lastElementChild.firstElementChild);
   }
 
   remove(item) {
