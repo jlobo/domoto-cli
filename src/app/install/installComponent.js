@@ -1,4 +1,4 @@
-const InstallViewValidation = require('./installViewValidation');
+const InstallComponentValidation = require('./installComponentValidation');
 const ImportTemplate = require('domoto/importTemplate');
 const InstallError = require('./installError');
 const Extension = require('./extension');
@@ -7,7 +7,7 @@ const EventEmitter = require('events');
 const config = require('../config');
 const alert = require('domoto/alert');
 
-module.exports = class installView extends EventEmitter {
+module.exports = class InstallComponent extends EventEmitter {
   constructor() {
     super();
 
@@ -27,7 +27,7 @@ module.exports = class installView extends EventEmitter {
   _init() {
     this.form = this.body.document.querySelector('form');
     this.package = this.body.document.getElementById('package');
-    this.validation = new InstallViewValidation(this.form);
+    this.validation = new InstallComponentValidation(this.form);
 
     this.extension.on('error', (err, extension) => this._extensionError(err, extension));
     this.extension.on('removed', extension => this._extensionRemoved(extension));

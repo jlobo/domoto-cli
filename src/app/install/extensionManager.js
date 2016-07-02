@@ -1,13 +1,13 @@
 const Menu = require('../menu');
 const Extension = require('./extension');
-const InstallView = require('./installView');
+const InstallComponent = require('./installComponent');
 
 module.exports = class ExtensionManager {
   constructor() {
     this.visibleBody = null;
     this.menu = Menu.instance;
     this.extension = Extension.instance;
-    this.components = [new InstallView()];
+    this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
 
     this.extension.on('removed', extension => this.remove(extension));
