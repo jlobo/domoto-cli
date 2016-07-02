@@ -1,7 +1,7 @@
-const InstallControllerValidation = require('./installComponentValidation');
+const alert = require('domoto/alert');
 const InstallError = require('../installError');
 const InstallManager = require('../installManager');
-const alert = require('domoto/alert');
+const InstallControllerValidation = require('./installControllerValidation');
 
 module.exports = class InstallController {
   constructor(template, itemMenu) {
