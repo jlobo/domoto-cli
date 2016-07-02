@@ -4,11 +4,11 @@ const templatePath = require('../config').getPath('/view/templates/install.html'
 
 module.exports = class InstallComponent extends Domoto {
   constructor() {
-    super('main', templatePath, InstallController);
+    super('inicio', templatePath, InstallController);
   }
 
   get _itemMenuDescription() {
-    return 'Main';
+    return 'Inicio';
   }
 
   get _itemMenuIcon() {
