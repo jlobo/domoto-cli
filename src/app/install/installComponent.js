@@ -8,7 +8,7 @@ module.exports = class InstallComponent extends Domoto {
   }
 
   get _itemMenuDescription() {
-    return 'Main..';
+    return 'Main';
   }
 
   get _itemMenuIcon() {

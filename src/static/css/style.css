@@ -103,4 +103,12 @@ nav,
 .input-field label:not(.active):after {
   transform: translateY(-140%);
 }
+
+.input-field input.invalid + label:after {
+  top: 55px;
+}
+
+.input-field input.validate {
+  margin: 0 0 20px 0;
+}
 /*Validacion*/
