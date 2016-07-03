@@ -7,8 +7,10 @@ let win;
 function createWindow() {
   win = new window('main', {width: 800, height: 600});
   win.loadURL(`file://${config.source}/view/index.html`);
-
   win.on('closed', () => { win = null; });
+
+  if (config.isDevelopment)
+    win.webContents.openDevTools();
 }
 
 function intercept(request, callback) {

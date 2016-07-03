@@ -1,5 +1,3 @@
-node_modules
-src/static/libs
-.idea
-.tmp
-doc
+node_modules/
+typings/
+src/static/libs/
