@@ -1,6 +1,7 @@
 const Menu = require('./menu');
 const InstallManager = require('./installManager');
 const InstallComponent = require('./install/installComponent');
+const ExternalLink = require('./externalLink');
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
@@ -15,6 +16,7 @@ module.exports = class ExtensionManager {
     this.installManager = InstallManager.instance;
     this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
+    this._externalLink = ExternalLink.instance;
 
     this.installManager.on('removed', extension => this.remove(extension));
     this.installManager.on('installed', extension => this._loadExtension(extension));
@@ -35,6 +37,7 @@ module.exports = class ExtensionManager {
     extension.itemMenu.on('remove', () => this.installManager.remove(extension.itemMenu.code));
     this.menu.add(extension.itemMenu);
     this._changeView(extension.body);
+    this._externalLink.apply(extension.body);
     extension.body.add(this.main);
   }
 
