@@ -104,7 +104,7 @@ module.exports = class InstallManager extends EventEmitter {
 
   _verifyDomotoInstallation(info) {
     info = info[Object.keys(info)[0]];
-    if (!info.keywords || !info.keywords.includes('domoto'))
+    if (!info.keywords || !info.keywords.includes('domoto-extension'))
       throw new InstallError('Lo sentimos, la extensión no es valida para Domoto');
   }
 
