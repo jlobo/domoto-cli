@@ -1,10 +1,13 @@
 const alert = require('domoto/alert');
+const EventEmitter = require('events');
 const InstallError = require('../installError');
 const InstallManager = require('../installManager');
 const InstallControllerValidation = require('./installControllerValidation');
 
-module.exports = class InstallController {
+module.exports = class InstallController extends EventEmitter {
   constructor(template, itemMenu) {
+    super();
+
     this.itemMenu = itemMenu;
 
     this.form = template.document.querySelector('form');
@@ -25,10 +28,13 @@ module.exports = class InstallController {
     if (!this.validation.isValid)
       return false;
 
+    this.emit('waiting', this);
     this.installManager.install(this.package.value);
   }
 
   _extensionError(err, name) {
+    this.emit('waited', this);
+
     if (err instanceof InstallError)
       return alert(err.message);
 
@@ -39,14 +45,17 @@ module.exports = class InstallController {
       return alert('Es necesario el acceso a internet para instalar la extensión');
 
     alert('Lo sentimos, se presentó un error interno de la aplicación');
+
     console.error(err);
   }
 
   _extensionInstalled(extension) {
     alert(`La extensión "${extension.name}" fue instalada exitosamente`);
+    this.emit('waited', this);
   }
 
   _extensionRemoved(extension) {
     alert(`La extensión "${extension.name}" fue removida exitosamente`);
+    this.emit('waited', this);
   }
 };

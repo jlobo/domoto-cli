@@ -1,3 +1,4 @@
+const Wait = require('./wait');
 const Menu = require('./menu');
 const InstallManager = require('./installManager');
 const InstallComponent = require('./install/installComponent');
@@ -16,6 +17,8 @@ module.exports = class ExtensionManager {
     this.installManager = InstallManager.instance;
     this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
+
+    this._wait = Wait.instance;
     this._externalLink = ExternalLink.instance;
 
     this.installManager.on('removed', extension => this.remove(extension));
@@ -35,9 +38,15 @@ module.exports = class ExtensionManager {
   add(extension) {
     extension.itemMenu.on('click', () => this._changeView(extension.body));
     extension.itemMenu.on('remove', () => this.installManager.remove(extension.itemMenu.code));
-    this.menu.add(extension.itemMenu);
     this._changeView(extension.body);
     this._externalLink.apply(extension.body);
+
+    if (extension.controller.on) {
+      extension.controller.on('waiting', this._wait.waiting);
+      extension.controller.on('waited', this._wait.waited);
+    }
+
+    this.menu.add(extension.itemMenu);
     extension.body.add(this.main);
   }
 
