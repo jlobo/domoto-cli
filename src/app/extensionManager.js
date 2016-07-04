@@ -13,7 +13,7 @@ module.exports = class ExtensionManager {
     if (enforcer !== singletonEnforcer)
       throw new Error('Cannot construct singleton');
 
-    this.visibleBody = null;
+    this._visibleBody = null;
     this.menu = Menu.instance;
     this.installManager = InstallManager.instance;
     this.components = [new InstallComponent()];
@@ -40,8 +40,11 @@ module.exports = class ExtensionManager {
   add(extension) {
     extension.itemMenu.on('click', () => this._changeView(extension.body));
     extension.itemMenu.on('remove', () => this.remove(extension));
-    this._changeView(extension.body);
     this._externalLink.apply(extension.body);
+
+    extension.body.hide();
+    if (!this._visibleBody)
+      this._changeView(extension.body);
 
     if (extension.controller.on) {
       extension.controller.on('waiting', this._wait.waiting);
@@ -54,12 +57,14 @@ module.exports = class ExtensionManager {
 
   remove(extension) {
     this._wait.waiting();
-    this.installManager.remove(extension.itemMenu.code)
+    this.installManager.remove(extension.itemMenu.code);
   }
 
   _removed(extension) {
     this._wait.waited();
     alert(`La extensión "${extension.name}" fue removida exitosamente`);
+    if (this._visibleBody === extension.body)
+      this._changeView(this.components[0].body);
 
     extension.itemMenu.remove();
     extension.body.remove();
@@ -73,10 +78,10 @@ module.exports = class ExtensionManager {
   }
 
   _changeView(body) {
-    if (this.visibleBody)
-      this.visibleBody.hide();
+    if (this._visibleBody)
+      this._visibleBody.hide();
 
     body.show();
-    this.visibleBody = body;
+    this._visibleBody = body;
   }
 };
