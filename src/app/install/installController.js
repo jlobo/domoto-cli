@@ -16,7 +16,6 @@ module.exports = class InstallController extends EventEmitter {
 
     this.installManager = InstallManager.instance;
     this.installManager.on('error', (err, name) => this._extensionError(err, name));
-    this.installManager.on('removed', extension => this._extensionRemoved(extension));
     this.installManager.on('installed', extension => this._extensionInstalled(extension));
     this.form.addEventListener('submit', e => this._installExtension(e));
 
@@ -51,11 +50,6 @@ module.exports = class InstallController extends EventEmitter {
 
   _extensionInstalled(extension) {
     alert(`La extensión "${extension.name}" fue instalada exitosamente`);
-    this.emit('waited', this);
-  }
-
-  _extensionRemoved(extension) {
-    alert(`La extensión "${extension.name}" fue removida exitosamente`);
     this.emit('waited', this);
   }
 };
