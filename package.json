@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "electron ./src/electron",
-    "postinstall": "npm install electron-prebuilt && bower install"
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
