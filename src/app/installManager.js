@@ -72,7 +72,14 @@ module.exports = class InstallManager extends EventEmitter {
     if (!extension)
       return null;
 
-    return extension[extensionKey] || (extension[extensionKey] = new (require(name))());
+    try {
+      return extension[extensionKey] || (extension[extensionKey] = new (require(name))());
+    }
+    catch (err) {
+      console.error(err);
+      this.emit('require-error', err, extension.name);
+      return null;
+    }
   }
 
   _verifyInput(name) {

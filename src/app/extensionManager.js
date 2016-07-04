@@ -24,6 +24,7 @@ module.exports = class ExtensionManager {
 
     this.installManager.on('removed', extension => this._removed(extension));
     this.installManager.on('installed', extension => this._loadExtension(extension));
+    this.installManager.on('require-error', (error, name) => alert(`La extensión "${name}" presento un error interno`));
 
     this._loadExtension(...this.components);
     this._loadExtension(...this.installManager.getExtensions());
@@ -65,8 +66,10 @@ module.exports = class ExtensionManager {
   }
 
   _loadExtension(...extensions) {
-    for (const extension of extensions)
-      extension.on('ready', () => this.add(extension));
+    for (const extension of extensions) {
+      if (extension)
+        extension.on('ready', () => this.add(extension));
+    }
   }
 
   _changeView(body) {
