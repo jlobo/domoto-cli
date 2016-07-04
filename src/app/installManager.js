@@ -1,5 +1,5 @@
+let npm = null;
 const q = require('q');
-const npm = require('npm');
 const jetpack = require('fs-jetpack');
 const EventEmitter = require('events');
 const { app } = require('electron').remote;
@@ -15,8 +15,6 @@ module.exports = class InstallManager extends EventEmitter {
       throw new Error('Cannot construct singleton');
 
     super();
-
-    this.isLoad = false;
     this.userDataDir = jetpack.cwd(app.getPath('userData'));
   }
 
@@ -74,7 +72,14 @@ module.exports = class InstallManager extends EventEmitter {
     if (!extension)
       return null;
 
-    return extension[extensionKey] || (extension[extensionKey] = new (require(name))());
+    try {
+      return extension[extensionKey] || (extension[extensionKey] = new (require(name))());
+    }
+    catch (err) {
+      console.error(err);
+      this.emit('require-error', err, extension.name);
+      return null;
+    }
   }
 
   _verifyInput(name) {
@@ -83,14 +88,21 @@ module.exports = class InstallManager extends EventEmitter {
   }
 
   _loadNpm() {
-    return this.isLoad
-      ? q.resolve()
-      : q.nfcall(npm.load, {'save-optional': true}).then(data => this._setLoaded(data));
+    this._setNpm();
+
+    return q.nfcall(npm.load, {'save-optional': true })
+      .then(() => npm.on('log', console.log));
   }
 
-  _setLoaded() {
-    this.isLoad = true;
-    npm.on('log', console.log);
+  // HACK: Cuando se reinstala un paquete, no instala las dependencias y por eso se limpia la cache
+  _setNpm() {
+    const files = Object.keys(require.cache);
+    const npmFiles = files.filter(file => file.indexOf('npm') !== -1 && file.indexOf('npm/node_modules') === -1);
+
+    for (const file of npmFiles)
+      delete require.cache[file];
+
+    npm = require('npm');
   }
 
   _verifyInstallation(extensionName) {
@@ -116,7 +128,7 @@ module.exports = class InstallManager extends EventEmitter {
   }
 
   _removeNpm(extensionName) {
-    return q.nfcall(npm.commands.remove, [extensionName]);
+    return q.nfcall(npm.commands.uninstall, [extensionName]);
   }
 
   _installNpm(extensionName) {
