@@ -1,7 +1,7 @@
 # Domoto CLI
 > Administrador de dispositivos inteligentes con el cual se permite
 aumentar el comportamiento de los dispositivos
-á partir de la interacción de los mismos.
+a partir de la interacción de los mismos.
 
 ### [Uso](https://www.youtube.com/playlist?list=PL8gKCBdi2r65tUsCWi3GZxZG5jciGYg92)
 Para ejecutar la aplicación se debe estar en la raíz del código fuente
@@ -12,7 +12,7 @@ npm start
 ```
 
 ### Extensiones
-Domoto CLI se puede extender instalando los paquetes desarrollador por terceros
+**Domoto CLI** se puede extender instalando los paquetes desarrollados por terceros
 haciendo uso de la librería [Domoto](https://gitlab.com/jloboprs/domoto).
 
 A continuación los paquetes que se pueden instalar:
