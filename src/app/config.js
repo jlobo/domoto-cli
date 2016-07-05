@@ -1,3 +1,4 @@
+const url = require('url');
 const path = require('path');
 
 module.exports = new (class config {
@@ -8,7 +9,21 @@ module.exports = new (class config {
     this.source = path.resolve(__dirname, '..');
   }
 
+  get isWindows() {
+    return (/^win/).test(process.platform);
+  }
+
   getPath(...paths) {
     return path.join(this.source, paths.join(''));
+  }
+
+  normalizeUrlPath(urlPath) {
+    return !this.isWindows || !(/^[a-zA-Z]:\\/).test(urlPath) ? urlPath : urlPath.substr(2);
+  }
+
+  getUrlPath(request) {
+    const pathname = path.normalize(url.parse(request.url).pathname);
+
+    return !this.isWindows || !(/^\\[a-zA-Z]:\\/).test(pathname) ? pathname : pathname.substr(1);
   }
 })();

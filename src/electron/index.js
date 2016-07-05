@@ -1,7 +1,6 @@
 const { app, protocol } = require('electron');
 const window = require('./window');
 const config = require('../app/config');
-const url = require('url');
 
 let win;
 function createWindow() {
@@ -14,9 +13,9 @@ function createWindow() {
 }
 
 function intercept(request, callback) {
-  let pathname = url.parse(request.url).pathname;
+  let pathname = config.getUrlPath(request);
   if (!pathname.includes(config.root))
-    pathname = config.getPath(pathname);
+    pathname = config.getPath(config.normalizeUrlPath(pathname));
 
   callback(pathname);
 }
