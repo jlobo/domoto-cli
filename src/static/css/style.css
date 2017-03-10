@@ -12,6 +12,13 @@ p {
   line-height: 2rem;
 }
 
+.parallax-container {
+    min-height: 300px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+}
+
 .button-collapse {
   color: #26a69a;
 }
