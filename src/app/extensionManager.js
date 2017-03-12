@@ -39,7 +39,7 @@ module.exports = class ExtensionManager {
 
   add(extension) {
     extension.itemMenu.on('click', () => this._changeView(extension.body));
-    extension.itemMenu.on('remove', () => this.remove(extension));
+    extension.on('remove', () => this.remove(extension));
     this._externalLink.apply(extension.body);
 
     extension.body.hide();
@@ -57,7 +57,7 @@ module.exports = class ExtensionManager {
 
   remove(extension) {
     this._wait.waiting();
-    this.installManager.remove(extension.itemMenu.code);
+    this.installManager.remove(extension.name);
   }
 
   _removed(extension) {
