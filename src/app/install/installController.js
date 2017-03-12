@@ -1,15 +1,11 @@
 const alert = require('domoto/alert');
-const EventEmitter = require('events');
 const InstallError = require('../installError');
 const InstallManager = require('../installManager');
 const InstallControllerValidation = require('./installControllerValidation');
 
-module.exports = class InstallController extends EventEmitter {
+module.exports = class InstallController {
   constructor(template, itemMenu) {
-    super();
-
     this._disabled = false;
-
     this.itemMenu = itemMenu;
     this.button = template.querySelector('button');
     this.form = template.document.querySelector('form');
@@ -19,6 +15,8 @@ module.exports = class InstallController extends EventEmitter {
     this.installManager = InstallManager.instance;
     this.installManager.on('error', (err, name) => this._extensionError(err, name));
     this.installManager.on('installed', extension => this._extensionInstalled(extension));
+    this.installManager.on('removed', extension => alert(`La extensión "${extension.name}" fue removida exitosamente`));
+    this.installManager.on('require-error', (error, name) => alert(`La extensión "${name}" presento un error interno`));
     this.form.addEventListener('submit', e => this._onSubmit(e));
 
     this.validation.validate();
@@ -40,7 +38,6 @@ module.exports = class InstallController extends EventEmitter {
       return alert('Lo sentimos, espere hasta que se acabe la instalación actual');
 
     this.disabled = true;
-    this.emit('waiting', this);
     this.installManager.install(extensionName);
   }
 
@@ -54,7 +51,6 @@ module.exports = class InstallController extends EventEmitter {
 
   _extensionError(err, name) {
     this.disabled = false;
-    this.emit('waited', this);
 
     if (err instanceof InstallError)
       return alert(err.message);
@@ -73,6 +69,5 @@ module.exports = class InstallController extends EventEmitter {
   _extensionInstalled(extension) {
     this.disabled = false;
     alert(`La extensión "${extension.name}" fue instalada exitosamente`);
-    this.emit('waited', this);
   }
 };

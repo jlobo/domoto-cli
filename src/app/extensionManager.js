@@ -1,6 +1,4 @@
-const Wait = require('./wait');
 const Menu = require('./menu');
-const alert = require('domoto/alert');
 const ExternalLink = require('./externalLink');
 const InstallManager = require('./installManager');
 const InstallComponent = require('./install/installComponent');
@@ -18,13 +16,10 @@ module.exports = class ExtensionManager {
     this.installManager = InstallManager.instance;
     this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
-
-    this._wait = Wait.instance;
     this._externalLink = ExternalLink.instance;
 
-    this.installManager.on('removed', extension => this._removed(extension));
+    this.installManager.on('removed', extension => this._onRemoved(extension));
     this.installManager.on('installed', extension => this._loadExtension(extension));
-    this.installManager.on('require-error', (error, name) => alert(`La extensión "${name}" presento un error interno`));
 
     this._loadExtension(...this.components);
     this._loadExtension(...this.installManager.getExtensions());
@@ -46,28 +41,19 @@ module.exports = class ExtensionManager {
     if (!this._visibleBody)
       this._changeView(extension.body);
 
-    if (extension.controller.on) {
-      extension.controller.on('waiting', this._wait.waiting);
-      extension.controller.on('waited', this._wait.waited);
-    }
-
     this.menu.add(extension.itemMenu);
     extension.body.add(this.main);
   }
 
   remove(extension) {
-    this._wait.waiting();
     this.installManager.remove(extension.name);
   }
 
-  _removed(extension) {
-    this._wait.waited();
-    alert(`La extensión "${extension.name}" fue removida exitosamente`);
+  _onRemoved(extension) {
+    extension.remove();
+
     if (this._visibleBody === extension.body)
       this._changeView(this.components[0].body);
-
-    extension.itemMenu.remove();
-    extension.body.remove();
   }
 
   _loadExtension(...extensions) {
