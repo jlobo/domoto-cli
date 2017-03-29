@@ -4,12 +4,12 @@ const InstallManager = require('../installManager');
 const InstallControllerValidation = require('./installControllerValidation');
 
 module.exports = class InstallController {
-  constructor(template, itemMenu) {
+  constructor(view, itemMenu) {
     this._disabled = false;
     this.itemMenu = itemMenu;
-    this.button = template.querySelector('button');
-    this.form = template.document.querySelector('form');
-    this.package = template.document.getElementById('package');
+    this.button = view.querySelector('button');
+    this.form = view.querySelector('form');
+    this.package = view.querySelector('#package');
     this.validation = new InstallControllerValidation(this.form);
 
     this.installManager = InstallManager.instance;

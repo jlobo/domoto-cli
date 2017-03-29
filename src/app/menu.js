@@ -11,13 +11,13 @@ module.exports = class Menu extends EventEmitter {
     super();
 
     this.btnCollapse = document.getElementById('btnMenuCollapse');
-    this.menu = document.getElementById('menu');
-    this.menu.removeAttribute('style');
+    this.element = document.getElementById('menu');
+    this.element.removeAttribute('style');
     this.btnCollapse.addEventListener('click', (e) => this.emit('collapse', e));
   }
 
   add(item, first = false) {
-    const root = this.menu.lastElementChild.firstElementChild;
+    const root = this.element.lastElementChild.firstElementChild;
 
     first ? root.insertBefore(item.element, root.children[1])
       : root.appendChild(item.element);
@@ -28,11 +28,11 @@ module.exports = class Menu extends EventEmitter {
   }
 
   show() {
-    this.menu.classList.remove('hide');
+    this.element.classList.remove('hide');
   }
 
   toggleShow() {
-    this.menu.classList.toggle('hide');
+    this.element.classList.toggle('hide');
   }
 
   static get instance() {

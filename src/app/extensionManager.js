@@ -13,16 +13,16 @@ module.exports = class ExtensionManager {
 
     this._visibleBody = null;
     this.menu = Menu.instance;
-    this.installManager = InstallManager.instance;
-    this.components = [new InstallComponent()];
     this.main = document.getElementById('main');
+    this.components = [new InstallComponent()];
     this._externalLink = ExternalLink.instance;
 
+    this.installManager = InstallManager.instance;
     this.installManager.on('removed', extension => extension.remove());
-    this.installManager.on('installed', extension => this._loadExtension(extension));
+    this.installManager.on('installed', extension => this.load(extension));
 
-    this._loadExtension(...this.components);
-    this._loadExtension(...this.installManager.getExtensions());
+    this.load(...this.components);
+    this.load(...this.installManager.getExtensions());
   }
 
   static get instance() {
@@ -32,11 +32,11 @@ module.exports = class ExtensionManager {
     return this[singleton];
   }
 
-  _loadExtension(...extensions) {
+  load(...extensions) {
     for (const extension of extensions) {
       if (extension) {
         extension.on('remove', () => this.installManager.remove(extension.name));
-        extension.on('load', (view) => this._loadView(view));
+        extension.on('loadView', (view) => this._loadView(view));
         this.menu.add(extension.itemMenu);
       }
     }

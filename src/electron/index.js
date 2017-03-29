@@ -15,7 +15,10 @@ function createWindow() {
 
 function intercept(request, callback) {
   let pathname = url.parse(request.url).pathname;
-  if (!pathname.includes(config.root))
+  //TODO: Add roots like express
+  if (pathname.startsWith('/extension'))
+    pathname = config.getExtensionPath(pathname.slice(10));
+  else if (!pathname.includes(config.root))
     pathname = config.getPath(pathname);
 
   callback(pathname);
