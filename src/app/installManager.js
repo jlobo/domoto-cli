@@ -91,7 +91,7 @@ module.exports = class InstallManager extends EventEmitter {
 
   _verifyInput(name) {
     if (!name)
-      throw new TypeError('El nombre de la extensión es requerida');
+      throw new TypeError('Extension name is required');
   }
 
   _loadNpm() {
@@ -124,14 +124,14 @@ module.exports = class InstallManager extends EventEmitter {
   _verifyDomotoInstallation(info) {
     info = info[Object.keys(info)[0]];
     if (!info.keywords || !info.keywords.includes('domoto-extension'))
-      throw new InstallError('Lo sentimos, la extensión no es valida para Domoto');
+      throw new InstallError('Sorry, the extension is not valid for Domoto');
   }
 
   _verifyDuplicateInstallation(name) {
     if (!Object.keys(this.installed).includes(name))
       return name;
 
-    throw new InstallError('La extensión ya se encuentra instalada');
+    throw new InstallError('The extension is already installed');
   }
 
   _removeNpm(extensionName) {

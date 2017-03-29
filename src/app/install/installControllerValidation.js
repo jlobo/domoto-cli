@@ -12,8 +12,8 @@ module.exports = class InstallControllerValidation extends Validation {
       },
       messages: {
         package: {
-          required: 'La extensión es requerida',
-          regex: 'La extensión contiene caracteres inválidos',
+          required: 'Extension is required',
+          regex: 'Extension contains invalid characters',
         },
       },
     });
