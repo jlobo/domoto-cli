@@ -1,6 +1,6 @@
 const { app, protocol } = require('electron');
-const window = require('./window');
 const config = require('../app/config');
+const window = require('./window');
 const url = require('url');
 
 let win;
