@@ -124,3 +124,7 @@ nav,
   margin: 0;
   position: fixed;
 }
+
+.card .card-content .card-title {
+  display: inline;
+}
